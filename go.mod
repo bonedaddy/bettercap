@@ -28,6 +28,7 @@ require (
 	github.com/jpillora/go-tld v1.0.0
 	github.com/koppacetic/go-gpsd v0.4.0
 	github.com/kr/binarydist v0.1.0 // indirect
+	github.com/kr/pretty v0.1.0 // indirect
 	github.com/malfunkt/iprange v0.9.0
 	github.com/mattn/go-colorable v0.1.7 // indirect
 	github.com/mdlayher/dhcp6 v0.0.0-20190311162359-2a67805d7d0b
@@ -42,6 +43,7 @@ require (
 	golang.org/x/net v0.0.0-20200925080053-05aa5d4ee321
 	golang.org/x/sys v0.0.0-20200923182605-d9f96fdee20d // indirect
 	golang.org/x/text v0.3.3 // indirect
-	gopkg.in/sourcemap.v1 v1.0.5 // indirect
-	honnef.co/go/tools v0.0.0-2019.2.1 // indirect
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
+
+replace github.com/evilsocket/islazy => github.com/bonedaddy/islazy v1.10.7-0.20201223214828-107aecf69d83
