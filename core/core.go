@@ -27,13 +27,9 @@ func PopulatePreLookupTable(lookups ...string) {
 			if err != nil {
 				panic("HasBinary returned true but LookPath failed, this is unexpected")
 			}
-			if path != "" {
-				preLookupLock.Lock()
-				preLookupPaths[lookup] = path
-				preLookupLock.Unlock()
-			}
-		} else {
-			continue
+			preLookupLock.Lock()
+			preLookupPaths[lookup] = path
+			preLookupLock.Unlock()
 		}
 	}
 }
