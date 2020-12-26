@@ -18,6 +18,10 @@ import (
 )
 
 func main() {
+	// populate binary lookup table for frequently checked binaries
+	// this should lead to measurable improvements in wifi channel hopping
+	core.PopulatePreLookupTable("iw", "iwconfig")
+
 	sess, err := session.New()
 	if err != nil {
 		fmt.Println(err)
