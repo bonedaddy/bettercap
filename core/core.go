@@ -80,7 +80,7 @@ func Exec(executable string, args []string) (string, error) {
 	)
 	preLookupLock.RLock()
 	path = preLookupPaths[executable]
-	preLookupLock.Unlock()
+	preLookupLock.RUnlock()
 	// we dont have this in the pre-lookup table
 	// so take the slow route of looking it up on disk
 	if path == "" {
