@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/evilsocket/islazy/fs"
@@ -177,5 +178,43 @@ func TestCoreExists(t *testing.T) {
 		if got != u.exists {
 			t.Fatalf("expected '%v', got '%v'", u.exists, got)
 		}
+	}
+}
+
+func TestPopulatePreLookupTable(t *testing.T) {
+	// note currently this binary lookup stuff
+	// this code seeks to optimize is only used on linux
+	// so only run this test on linux, however this may want to be changed in the future
+	if runtime.GOOS != "linux" {
+		t.Skip("not linux")
+	}
+	tests := []struct {
+		arg     string
+		wantErr bool
+	}{
+		{"keks", true},
+		{"iw", false},
+		{"ifconfig", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.arg, func(t *testing.T) {
+			PopulatePreLookupTable(tt.arg)
+			if tt.wantErr {
+				if preLookupTable[tt.arg] {
+					t.Error("lookup table should be false")
+				}
+				if preLookupPaths[tt.arg] != "" {
+					t.Error("paths should be nil")
+				}
+			}
+			if !tt.wantErr {
+				if !preLookupTable[tt.arg] {
+					t.Error("lookup table should be true")
+				}
+				if preLookupPaths[tt.arg] == "" {
+					t.Error("paths should not be nil")
+				}
+			}
+		})
 	}
 }
