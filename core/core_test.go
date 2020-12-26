@@ -218,3 +218,32 @@ func TestPopulatePreLookupTable(t *testing.T) {
 		})
 	}
 }
+
+// used to benchmark the effect of the binary lookup cache
+func BenchmarkCachedExeLookup(b *testing.B) {
+	b.StopTimer()
+	// reset the lookup table for this benchmark
+	preLookupTable = make(map[string]bool)
+	// cache the binary
+	PopulatePreLookupTable("iw")
+	// reset timer and other information
+	b.ResetTimer()
+	// start the timer
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+		_ = HasBinary("iw")
+	}
+}
+
+// used to benchmark the effect of not using a binary lookup cache
+func BenchmarkDirectExeLookup(b *testing.B) {
+	b.StopTimer()
+	// reset the lookup table
+	preLookupTable = make(map[string]bool)
+	// reset timer and other information
+	b.ResetTimer()
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+		_ = HasBinary("iw")
+	}
+}
