@@ -111,6 +111,9 @@ func (mod *WiFiModule) startAssoc(to net.HardwareAddr) error {
 		// send the association request frames
 		for _, ap := range toAssoc {
 			if mod.Running() {
+				if ap == nil {
+					continue
+				}
 				logger := mod.Info
 				if mod.isAssocSilent() {
 					logger = mod.Debug
