@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var (
@@ -23,6 +24,7 @@ type Station struct {
 	Authentication string            `json:"authentication"`
 	WPS            map[string]string `json:"wps"`
 	Handshake      *Handshake        `json:"-"`
+	*sync.RWMutex
 }
 
 func cleanESSID(essid string) string {
@@ -45,6 +47,7 @@ func NewStation(essid, bssid string, frequency int, rssi int8) *Station {
 		RSSI:      rssi,
 		WPS:       make(map[string]string),
 		Handshake: NewHandshake(),
+		RWMutex:   &sync.RWMutex{},
 	}
 }
 
@@ -57,6 +60,8 @@ func (s *Station) ESSID() string {
 }
 
 func (s *Station) HasWPS() bool {
+	s.RLock()
+	defer s.RUnlock()
 	return len(s.WPS) > 0
 }
 

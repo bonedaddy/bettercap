@@ -115,6 +115,7 @@ func (mod *WiFiModule) getRow(station *network.Station) ([]string, bool) {
 
 		wps := ""
 		if station.HasWPS() {
+			station.RLock()
 			if ver, found := station.WPS["Version"]; found {
 				wps = ver
 			} else {
@@ -126,7 +127,7 @@ func (mod *WiFiModule) getRow(station *network.Station) ([]string, bool) {
 					wps += " (not configured)"
 				}
 			}
-
+			station.RUnlock()
 			wps = tui.Dim(tui.Yellow(wps))
 		}
 
@@ -384,6 +385,7 @@ func (mod *WiFiModule) ShowWPS(bssid string) (err error) {
 		}
 
 		keys := []string{}
+		station.RLock()
 		for name := range station.WPS {
 			keys = append(keys, name)
 		}
@@ -395,6 +397,7 @@ func (mod *WiFiModule) ShowWPS(bssid string) (err error) {
 				tui.Yellow(station.WPS[name]),
 			})
 		}
+		station.RUnlock()
 
 		tui.Table(os.Stdout, colNames, rows)
 	}
